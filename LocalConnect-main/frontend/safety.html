@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Guidelines - LocalConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo" style="text-decoration: none;">LocalConnect</a>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="post.html">Post Item</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+      </nav>
+      <div class="user-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="padding-top: 2rem; max-width: 800px;">
+    <div class="how-it-works" style="padding: 3rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🛡️</div>
+        <h1>Safety Guidelines</h1>
+        <p style="color: var(--gray-600); max-width: 500px; margin: 0 auto;">Your safety is our top priority. Follow these guidelines to ensure safe and successful transactions.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid var(--primary);">
+          <div style="font-size: 2rem; flex-shrink: 0;">🏪</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Meet in Public Places</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">Always meet in well-lit, public locations like coffee shops, grocery store parking lots, or police station safe exchange zones. Never invite strangers to your home or go to theirs.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid var(--secondary);">
+          <div style="font-size: 2rem; flex-shrink: 0;">👥</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Bring a Friend</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">Whenever possible, bring a friend or family member with you to the meeting. There's safety in numbers, and an extra set of eyes can help verify the item.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid var(--accent);">
+          <div style="font-size: 2rem; flex-shrink: 0;">💵</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Use Cash or Secure Payment</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">Cash is king for local transactions. If using digital payment, verify the transfer is complete before handing over the item. Never accept checks from strangers or wire money.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid #ec4899;">
+          <div style="font-size: 2rem; flex-shrink: 0;">📱</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Keep Communication In-App</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">Use LocalConnect's messaging system for all communication. This creates a record and protects your personal contact information until you're comfortable sharing it.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid var(--danger);">
+          <div style="font-size: 2rem; flex-shrink: 0;">🔍</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Inspect Before You Buy</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">Thoroughly inspect the item before completing the transaction. Test electronics, check for damage, and verify it matches the listing description. Don't feel pressured to buy if something feels off.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.5rem; background: var(--gray-50); border-radius: var(--radius-lg); border-left: 4px solid #6366f1;">
+          <div style="font-size: 2rem; flex-shrink: 0;">🚩</div>
+          <div>
+            <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Trust Your Instincts</h3>
+            <p style="color: var(--gray-600); margin-bottom: 0; font-size: 0.9375rem;">If a deal seems too good to be true, it probably is. If a seller is pushy, refuses to meet in public, or asks for unusual payment methods, walk away. Report suspicious behavior to us immediately.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align: center; margin-top: 2.5rem; padding: 1.5rem; background: linear-gradient(135deg, var(--primary-light) 0%, #dbeafe 100%); border-radius: var(--radius-lg);">
+        <h3 style="margin-bottom: 0.5rem;">Need Help?</h3>
+        <p style="color: var(--gray-600); margin-bottom: 1rem;">If you encounter any issues or feel unsafe, contact our support team immediately.</p>
+        <a href="contact.html" class="btn btn-primary">Contact Support</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 2rem;">
+    <div class="footer-container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

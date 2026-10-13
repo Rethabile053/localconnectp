@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post an Item - LocalConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .image-upload-card {
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem 1.5rem;
+      background: var(--gray-50);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+    .image-upload-card:hover,
+    .image-upload-card.drag-over {
+      border-color: var(--primary);
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+    .image-upload-card p {
+      margin: 0;
+      color: var(--gray-600);
+    }
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .image-preview-card {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+    }
+    .image-preview-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+    .image-preview-note {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      margin-top: 0.5rem;
+    }
+    .post-summary {
+      margin-top: 1.75rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-xs);
+    }
+    .post-summary h3 {
+      margin-bottom: 1rem;
+    }
+    .post-summary-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    .post-summary-grid > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .post-summary-grid strong {
+      color: var(--gray-700);
+    }
+    .submission-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .submission-images img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo" style="text-decoration: none;">LocalConnect</a>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="post.html" class="active">Post Item</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+      </nav>
+      <div class="user-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="padding-top: 2rem;">
+    <div style="max-width: 700px; margin: 0 auto;">
+      <div class="form-header" style="text-align: center; margin-bottom: 2rem;">
+        <h2>Post Your Item</h2>
+        <p>Share what you have with your neighbors</p>
+      </div>
+
+      <div class="form-container" style="max-width: 100%;">
+        <form id="postForm" action="/api/listings" method="POST" enctype="multipart/form-data">
+
+          <!-- Title -->
+          <div class="form-group">
+            <label class="form-label" for="title">Listing Title *</label>
+            <input type="text" id="title" name="title" class="form-input" placeholder="e.g., Mid-Century Modern Sofa - Like New" required maxlength="100">
+            <p class="form-hint">Be descriptive. Include brand, condition, and key details.</p>
+          </div>
+
+          <!-- Category & Price Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="category">Category *</label>
+              <select id="category" name="category" class="form-select" required>
+                <option value="">Select a category</option>
+                <option value="furniture">Furniture & Home Goods</option>
+                <option value="electronics">Electronics & Gadgets</option>
+                <option value="clothing">Clothing & Accessories</option>
+                <option value="books">Books, Games & Media</option>
+                <option value="tools">Tools & Hardware</option>
+                <option value="services">Local Services</option>
+                <option value="housing">Housing & Rentals</option>
+                <option value="vehicles">Vehicles & Bikes</option>
+                <option value="free">Free Items</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="price">Price *</label>
+              <input type="text" id="price" name="price" class="form-input" placeholder="e.g., 150 or Free" required>
+            </div>
+          </div>
+
+          <!-- Condition & Location Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="condition">Condition</label>
+              <select id="condition" name="condition" class="form-select">
+                <option value="">Select condition</option>
+                <option value="new">New</option>
+                <option value="like-new">Like New</option>
+                <option value="good">Good</option>
+                <option value="fair">Fair</option>
+                <option value="for-parts">For Parts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="location">Location *</label>
+              <input type="text" id="location" name="location" class="form-input" placeholder="City, State or ZIP" required>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label class="form-label" for="description">Description *</label>
+            <textarea id="description" name="description" class="form-textarea" placeholder="Describe your item in detail. Include dimensions, age, any defects, and why you're selling it." required minlength="20" maxlength="2000"></textarea>
+            <p class="form-hint">Min. 20 characters. Be honest about the condition.</p>
+          </div>
+
+          <!-- Photos -->
+          <div class="form-group">
+            <label class="form-label" for="photos">Photos</label>
+            <div id="photoUploadCard" class="image-upload-card" tabindex="0">
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📷</div>
+              <p style="color: var(--gray-600); font-weight: 600; margin-bottom: 0.25rem;">Select images to show your item</p>
+              <p style="color: var(--gray-500); font-size: 0.95rem;">Click here or drop files to upload.</p>
+              <p class="image-preview-note">Supported formats: JPG, JPEG, PNG. Max 5MB each.</p>
+              <input type="file" id="photos" name="photos" multiple accept="image/jpeg,image/png,image/jpg" hidden>
+            </div>
+            <div id="photoPreview" class="image-preview-grid"></div>
+          </div>
+
+          <!-- Contact Preferences -->
+          <div class="form-group">
+            <label class="form-label">Contact Preferences</label>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+              <label class="checkbox-group" style="margin-bottom: 0;">
+                <input type="checkbox" name="contact" value="message" checked>
+                <span>In-app Messages</span>
+              </label>
+              <label class="checkbox-group" style="margin-bottom: 0;">
+                <input type="checkbox" name="contact" value="email">
+                <span>Email</span>
+              </label>
+              <label class="checkbox-group" style="margin-bottom: 0;">
+                <input type="checkbox" name="contact" value="phone">
+                <span>Phone</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Safety Checkbox -->
+          <div class="checkbox-group">
+            <input type="checkbox" id="safety" name="safety" required>
+            <label for="safety">I agree to meet in a <a href="safety.html">safe public location</a> and follow community guidelines.</label>
+          </div>
+
+          <p id="postError" class="form-error hidden"></p>
+          <p id="postSuccess" class="form-success hidden"></p>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="submit" class="btn btn-primary form-submit" style="margin-top: 0;">Post Listing</button>
+            <button type="button" class="btn btn-secondary" style="margin-top: 0;" onclick="window.location.href='index.html'">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 2rem;">
+    <div class="footer-container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const photoInput = document.getElementById('photos');
+    const uploadCard = document.getElementById('photoUploadCard');
+    const photoPreview = document.getElementById('photoPreview');
+    const submissionSummary = document.createElement('div');
+    submissionSummary.id = 'submissionPreview';
+    submissionSummary.className = 'post-summary hidden';
+
+    function renderPhotoPreview(files) {
+      photoPreview.innerHTML = '';
+
+      if (!files.length) {
+        photoPreview.innerHTML = '<p class="form-hint">No image selected yet. Choose JPG or PNG to preview before posting.</p>';
+        return;
+      }
+
+      files.slice(0, 8).forEach(file => {
+        const imageType = file.type.toLowerCase();
+        if (!['image/jpeg', 'image/jpg', 'image/png'].includes(imageType)) {
+          return;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'image-preview-card';
+
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.onload = () => URL.revokeObjectURL(img.src);
+
+        card.appendChild(img);
+        photoPreview.appendChild(card);
+      });
+
+      if (files.length > 8) {
+        const note = document.createElement('p');
+        note.className = 'form-hint';
+        note.textContent = `Showing first 8 images of ${files.length}.`;
+        photoPreview.appendChild(note);
+      }
+    }
+
+    function validateImageFiles(files) {
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      return Array.from(files).filter(file => allowedTypes.includes(file.type));
+    }
+
+    function normalizePrice(value) {
+      if (!value) {
+        return 0;
+      }
+      const raw = String(value).trim();
+      if (raw.toLowerCase() === 'free') {
+        return 0;
+      }
+      const amount = parseFloat(raw.replace(/[^0-9.\-]/g, ''));
+      return Number.isNaN(amount) ? 0 : amount;
+    }
+
+    uploadCard.addEventListener('click', () => photoInput.click());
+
+    uploadCard.addEventListener('dragover', event => {
+      event.preventDefault();
+      uploadCard.classList.add('drag-over');
+    });
+
+    uploadCard.addEventListener('dragleave', () => {
+      uploadCard.classList.remove('drag-over');
+    });
+
+    uploadCard.addEventListener('drop', event => {
+      event.preventDefault();
+      uploadCard.classList.remove('drag-over');
+      const files = Array.from(event.dataTransfer.files || []);
+      const dataTransfer = new DataTransfer();
+      files.forEach(file => dataTransfer.items.add(file));
+      photoInput.files = dataTransfer.files;
+      renderPhotoPreview(validateImageFiles(files));
+    });
+
+    photoInput.addEventListener('change', () => {
+      const files = validateImageFiles(photoInput.files);
+      renderPhotoPreview(files);
+    });
+
+    document.getElementById('postForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const errorEl = document.getElementById('postError');
+      const successEl = document.getElementById('postSuccess');
+      const title = document.getElementById('title').value.trim();
+      const price = document.getElementById('price').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const category = document.getElementById('category').value;
+      const condition = document.getElementById('condition').value;
+      const files = validateImageFiles(photoInput.files);
+
+      errorEl.classList.add('hidden');
+      successEl.classList.add('hidden');
+
+      if (!title || !price || !location || !description) {
+        errorEl.textContent = 'Please fill in all required fields before posting your listing.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      const listingPayload = {
+        title,
+        category: category || 'general',
+        condition: condition || 'good',
+        price: normalizePrice(price),
+        location,
+        description,
+        image_urls: [],
+        status: 'active',
+      };
+
+      try {
+        const listing = await createListing(listingPayload);
+        const uploadedUrls = [];
+
+        if (files.length) {
+          for (const file of files.slice(0, 6)) {
+            uploadedUrls.push(await uploadListingImage(listing.id, file));
+          }
+        }
+
+        if (uploadedUrls.length) {
+          await updateListing(listing.id, { image_urls: uploadedUrls });
+        }
+
+        successEl.textContent = '✅ Listing posted successfully! Redirecting to Browse…';
+        successEl.classList.remove('hidden');
+
+        setTimeout(() => {
+          window.location.href = 'browse.html';
+        }, 1500);
+      } catch (error) {
+        errorEl.textContent = error.message || '⚠️ Unable to post listing. Please try again.';
+        errorEl.classList.remove('hidden');
+      }
+    });
+
+    renderPhotoPreview([]);
+  </script>
+
+</body>
+</html>

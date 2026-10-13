@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - LocalConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo" style="text-decoration: none;">LocalConnect</a>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="post.html">Post Item</a>
+      </nav>
+      <div class="user-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="padding-top: 3rem;">
+    <div class="form-container fade-in">
+      <div class="form-header">
+        <h2>Create Your Account</h2>
+        <p>Join your neighborhood marketplace today</p>
+      </div>
+
+      <div class="auth-toggle">
+        <button onclick="window.location.href='login.html'">Log In</button>
+        <button class="active" onclick="window.location.href='register.html'">Register</button>
+      </div>
+
+      <form id="registerForm" action="/api/register" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" class="form-input" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-input" placeholder="johndoe123" required>
+          <p class="form-hint">This will be visible to other users</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="Min. 6 characters" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Repeat password" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">Your Location</label>
+          <input type="text" id="location" name="location" class="form-input" placeholder="City, State or ZIP code" required>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" name="terms" required>
+          <label for="terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+        </div>
+
+        <p id="regError" class="form-error hidden"></p>
+        <p id="regSuccess" class="form-success hidden"></p>
+
+        <button type="submit" class="btn btn-primary form-submit">Create Account</button>
+      </form>
+
+      <div class="form-footer">
+        <p>Already have an account? <a href="login.html">Log in</a></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 2rem;">
+    <div class="footer-container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.querySelector('#registerForm .form-submit');
+
+    const LOCAL_BACKEND_PORT = 3000;
+    const API_BASE_URL = window.location.protocol === 'file:'
+      ? `http://localhost:${LOCAL_BACKEND_PORT}`
+      : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? `http://localhost:${LOCAL_BACKEND_PORT}`
+        : window.location.origin;
+    const isFileProtocol = window.location.protocol === 'file:';
+
+    function showMessage(element, message, type = 'error') {
+      element.textContent = message;
+      element.classList.remove('hidden');
+
+      if (type === 'success') {
+        element.classList.remove('form-error');
+        element.classList.add('form-success');
+      } else {
+        element.classList.remove('form-success');
+        element.classList.add('form-error');
+      }
+    }
+
+    function hideMessage(element) {
+      element.textContent = '';
+      element.classList.add('hidden');
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      const location = document.getElementById('location').value.trim();
+      const errorEl = document.getElementById('regError');
+      const successEl = document.getElementById('regSuccess');
+
+      hideMessage(errorEl);
+      hideMessage(successEl);
+
+      if (password !== confirm) {
+        showMessage(errorEl, '⚠️ Passwords do not match.', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(errorEl, '⚠️ Password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      if (!firstName || !lastName || !username || !email || !location) {
+        showMessage(errorEl, '⚠️ Please complete all required fields before registering.', 'error');
+        return;
+      }
+
+      try {
+        const metadata = {
+          display_name: `${firstName} ${lastName}`,
+          username: username,
+        };
+
+        const result = await signUpUser(email, password, metadata);
+        
+        if (result && result.user && result.user.id) {
+          // Update the user profile with the location
+          await updateUserProfile(result.user.id, {
+            location: location
+          });
+        }
+
+        showMessage(successEl, '✅ Account created successfully! Redirecting to login...', 'success');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      } catch (error) {
+        showMessage(errorEl, error.message || '⚠️ Registration failed. Please try again.', 'error');
+      }
+    }
+
+    registerForm.addEventListener('submit', handleRegister);
+  </script>
+
+</body>
+</html>

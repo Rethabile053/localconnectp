@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - LocalConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="listings.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo" style="text-decoration: none;">LocalConnect</a>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="post.html">Post Item</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html" class="active">My Profile</a>
+      </nav>
+      <div class="user-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="padding-top: 2rem;">
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar"></div>
+      <div class="profile-info">
+        <h2>Loading...</h2>
+        <div class="location">📍 Loading location...</div>
+        <div class="profile-meta-grid">
+          <div class="profile-detail">
+            <span>First Name</span>
+            <div id="profileFirstName" class="meta-value">Loading...</div>
+          </div>
+          <div class="profile-detail">
+            <span>Last Name</span>
+            <div id="profileLastName" class="meta-value">Loading...</div>
+          </div>
+          <div class="profile-detail">
+            <span>Username</span>
+            <div id="profileUsername" class="meta-value">Loading...</div>
+          </div>
+          <div class="profile-detail">
+            <span>Location</span>
+            <div id="profileLocation" class="meta-value">Loading...</div>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat">
+            <div class="stat-value">-</div>
+            <div class="stat-label">Listings</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">-</div>
+            <div class="stat-label">Sold</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">-</div>
+            <div class="stat-label">Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">-</div>
+            <div class="stat-label">Reviews</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-left: auto;">
+        <button class="btn btn-secondary" onclick="alert('Edit profile feature coming soon!')">✏️ Edit Profile</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs">
+      <button class="profile-tab active" onclick="switchTab('listings', this)">My Listings</button>
+      <button class="profile-tab" onclick="switchTab('favorites', this)">Favorites</button>
+      <button class="profile-tab" onclick="switchTab('reviews', this)">Reviews</button>
+      <button class="profile-tab" onclick="switchTab('settings', this)">Settings</button>
+    </div>
+
+    <!-- Tab: My Listings -->
+    <div id="tab-listings" class="tab-content">
+      <div class="section-header">
+        <h3 style="margin-bottom: 0;">My Listings</h3>
+        <a href="post.html" class="btn btn-primary btn-sm">+ New Listing</a>
+      </div>
+      <div id="profileListingsGrid" class="listings-grid"></div>
+    </div>
+
+    <!-- Tab: Favorites -->
+    <div id="tab-favorites" class="tab-content hidden">
+      <div class="section-header">
+        <h3 style="margin-bottom: 0;">Saved Favorites</h3>
+      </div>
+      <div id="profileFavoritesGrid" class="listings-grid"></div>
+    </div>
+
+    <!-- Tab: Reviews -->
+    <div id="tab-reviews" class="tab-content hidden">
+      <div class="section-header">
+        <h3 style="margin-bottom: 0;">Reviews</h3>
+        <span style="color: var(--gray-500);">4.9 ★ from 23 reviews</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div class="seller-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 0.875rem;">SM</div>
+            <div>
+              <div style="font-weight: 700; color: var(--gray-900);">Sarah M.</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-500);">2 days ago</div>
+            </div>
+            <div style="margin-left: auto; color: var(--accent); font-weight: 700;">★★★★★</div>
+          </div>
+          <p style="color: var(--gray-700); margin-bottom: 0;">Great seller! The sofa was exactly as described and John was super friendly. Smooth transaction. Would definitely buy from again!</p>
+        </div>
+        <div style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div class="seller-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 0.875rem;">MK</div>
+            <div>
+              <div style="font-weight: 700; color: var(--gray-900);">Mike K.</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-500);">1 week ago</div>
+            </div>
+            <div style="margin-left: auto; color: var(--accent); font-weight: 700;">★★★★★</div>
+          </div>
+          <p style="color: var(--gray-700); margin-bottom: 0;">Fast response and easy pickup. The headphones were in perfect condition. Highly recommend!</p>
+        </div>
+        <div style="background: var(--white); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--gray-200);">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div class="seller-avatar" style="width: 2.5rem; height: 2.5rem; font-size: 0.875rem;">AL</div>
+            <div>
+              <div style="font-weight: 700; color: var(--gray-900);">Amy L.</div>
+              <div style="font-size: 0.8125rem; color: var(--gray-500);">2 weeks ago</div>
+            </div>
+            <div style="margin-left: auto; color: var(--accent); font-weight: 700;">★★★★☆</div>
+          </div>
+          <p style="color: var(--gray-700); margin-bottom: 0;">Good experience overall. Item was as described. Met at a convenient public location.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Settings -->
+    <div id="tab-settings" class="tab-content hidden">
+      <div class="form-container" style="max-width: 600px;">
+        <h3 style="margin-bottom: 1.5rem;">Account Settings</h3>
+
+        <div class="form-group">
+          <label class="form-label">Display Name</label>
+          <input id="settingsDisplayName" type="text" class="form-input" value="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input id="settingsEmail" type="email" class="form-input" value="john.doe@email.com" disabled>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" value="(555) 123-4567">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input id="settingsLocation" type="text" class="form-input" value="Brooklyn, NY">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Bio</label>
+          <textarea id="settingsBio" class="form-textarea" rows="3">Local Brooklyn resident. Love finding good deals and helping neighbors!</textarea>
+        </div>
+
+        <h4 style="margin: 2rem 0 1rem; font-size: 1.125rem;">Notifications</h4>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="notif-messages" checked>
+          <label for="notif-messages">New message notifications</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="notif-listings" checked>
+          <label for="notif-listings">Listing activity (views, favorites)</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="notif-promo">
+          <label for="notif-promo">Promotional emails and updates</label>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button class="btn btn-primary" id="profileSaveBtn">Save Changes</button>
+          <button class="btn btn-secondary" id="profileCancelBtn" type="button">Cancel</button>
+        </div>
+
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gray-200);">
+          <h4 style="color: var(--danger); margin-bottom: 1rem;">Danger Zone</h4>
+          <button class="btn btn-secondary" style="color: var(--danger); border-color: var(--danger);">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: 2rem;">
+    <div class="footer-container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(tabName, btn) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+      // Show selected tab
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      // Update active button
+      document.querySelectorAll('.profile-tab').forEach(tab => tab.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof loadProfileHeader === 'function') {
+        loadProfileHeader();
+      }
+      if (typeof loadProfileListings === 'function') {
+        loadProfileListings();
+      }
+      if (typeof loadProfileFavorites === 'function') {
+        loadProfileFavorites();
+      }
+    });
+  </script>
+
+  <script>
+    async function initProfileSettings() {
+      const user = await getCurrentUser();
+      if (!user) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      const profile = await getUserProfile(user.id);
+      const displayName = profile?.display_name || user?.user_metadata?.displayName || user?.email?.split('@')[0] || '';
+      const location = profile?.location || user?.user_metadata?.location || '';
+      const bio = profile?.bio || '';
+
+      document.getElementById('settingsDisplayName').value = displayName;
+      document.getElementById('settingsEmail').value = user.email || '';
+      document.getElementById('settingsLocation').value = location;
+      document.getElementById('settingsBio').value = bio;
+
+      document.getElementById('profileSaveBtn')?.addEventListener('click', async () => {
+        try {
+          const updatedDisplayName = document.getElementById('settingsDisplayName').value.trim();
+          const updatedLocation = document.getElementById('settingsLocation').value.trim();
+          const updatedBio = document.getElementById('settingsBio').value.trim();
+
+          await updateUserProfile(user.id, {
+            display_name: updatedDisplayName,
+            location: updatedLocation,
+            bio: updatedBio,
+          });
+
+          await loadProfileHeader();
+          alert('Profile updated successfully.');
+        } catch (error) {
+          console.error('Profile save failed:', error);
+          alert('Unable to save profile changes. Please try again.');
+        }
+      });
+
+      document.getElementById('profileCancelBtn')?.addEventListener('click', () => {
+        initProfileSettings();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof loadProfileHeader === 'function') {
+        loadProfileHeader();
+      }
+      if (typeof loadProfileListings === 'function') {
+        loadProfileListings();
+      }
+      if (typeof loadProfileFavorites === 'function') {
+        loadProfileFavorites();
+      }
+      initProfileSettings();
+    });
+  </script>
+
+</body>
+</html>

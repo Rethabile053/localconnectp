@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Listings - LocalConnect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="listings.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo" style="text-decoration: none;">LocalConnect</a>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="browse.html" class="active">Browse</a>
+        <a href="post.html">Post Item</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+      </nav>
+      <div class="user-actions">
+        <a href="login.html" class="btn btn-secondary btn-sm">Log In</a>
+        <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container" style="padding-top: 2rem;">
+
+    <!-- Page Title & Filter Bar -->
+    <div class="section-header" style="margin-bottom: 1.5rem;">
+      <h2 class="section-title"> Browse Listings</h2>
+      <span id="browseCount" style="color: var(--gray-500); font-size: 0.9375rem;">0 results</span>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="background: var(--white); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow); border: 1px solid var(--gray-200); margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+      <select id="categoryFilter" class="form-select" style="width: auto; min-width: 160px;">
+        <option value="">All Categories</option>
+        <option value="furniture">Furniture & Home Goods</option>
+        <option value="electronics">Electronics & Gadgets</option>
+        <option value="clothing">Clothing & Accessories</option>
+        <option value="books">Books, Games & Media</option>
+        <option value="tools">Tools & Hardware</option>
+        <option value="services">Local Services</option>
+        <option value="housing">Housing & Rentals</option>
+        <option value="vehicles">Vehicles & Bikes</option>
+        <option value="free">Free Items</option>
+      </select>
+      <select class="form-select" style="width: auto; min-width: 140px;" disabled>
+        <option>Any Price</option>
+      </select>
+      <select class="form-select" style="width: auto; min-width: 140px;" disabled>
+        <option>Any Condition</option>
+      </select>
+      <select class="form-select" style="width: auto; min-width: 140px;" disabled>
+        <option>Sort by: Newest</option>
+      </select>
+      <input id="searchInput" type="text" class="form-input" placeholder="Search listings" style="width: auto; min-width: 140px;">
+      <input id="locationInput" type="text" class="form-input" placeholder="City or ZIP" style="width: auto; min-width: 140px;">
+      <button id="applyFiltersButton" class="btn btn-primary" style="margin-left: auto;">Apply Filters</button>
+    </div>
+
+    <!-- Listings Grid -->
+    <div id="browseListings" class="listings-grid"></div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof loadBrowseListings === 'function') {
+        loadBrowseListings();
+      }
+
+      const applyButton = document.getElementById('applyFiltersButton');
+      applyButton?.addEventListener('click', (event) => {
+        event.preventDefault();
+        const category = document.getElementById('categoryFilter')?.value;
+        const search = document.getElementById('searchInput')?.value.trim();
+        const location = document.getElementById('locationInput')?.value.trim();
+        const params = new URLSearchParams();
+
+        if (category) {
+          params.set('cat', category);
+        }
+        if (search) {
+          params.set('q', search);
+        }
+        if (location) {
+          params.set('loc', location);
+        }
+
+        window.location.search = params.toString();
+      });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">LocalConnect</div>
+          <p class="footer-desc">Your trusted neighborhood marketplace. Buy, sell, and connect with people in your community safely and easily.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-link" aria-label="Instagram">📷</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-heading">Discover</h4>
+          <ul class="footer-links">
+            <li><a href="browse.html">Browse Listings</a></li>
+            <li><a href="browse.html?cat=free">Free Items</a></li>
+            <li><a href="browse.html?cat=services">Local Services</a></li>
+            <li><a href="browse.html?cat=housing">Housing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Community</h4>
+          <ul class="footer-links">
+            <li><a href="safety.html">Safety Guidelines</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Legal</h4>
+          <ul class="footer-links">
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

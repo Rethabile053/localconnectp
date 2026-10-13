@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalConnect - Your Neighborhood Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="supabase.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="listings.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div>
+        <div class="logo">LocalConnect</div>
+        <div class="tagline">Your Neighborhood Marketplace</div>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="browse.html">Browse</a>
+        <a href="post.html">Post Item</a>
+        <a href="messages.html">Messages</a>
+        <a href="profile.html">My Profile</a>
+        <a href="cart.html">Cart <span class="cart-badge" id="navCartCount">0</span></a>
+        
+      </nav>
+      <div class="user-actions">
+        <a href="login.html">Log In</a>
+        <a href="register.html">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Search Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Find Great Deals Near You</h1>
+      <p class="hero-subtitle">Buy, sell, and connect with neighbors in your community</p>
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search for items, services...">
+        <select class="search-select">
+          <option>All Categories</option>
+          <option>Furniture & Home Goods</option>
+          <option>Electronics & Gadgets</option>
+          <option>Clothing & Accessories</option>
+          <option>Books, Games & Media</option>
+          <option>Tools & Hardware</option>
+          <option>Local Services</option>
+          <option>Housing & Rentals</option>
+          <option>Vehicles & Bikes</option>
+          <option>Free Items</option>
+        </select>
+        <input type="text" class="search-input" placeholder="City or ZIP code" style="max-width: 160px;">
+        <button class="search-btn">🔍 Search</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-container">
+
+    <!-- Browse by Category -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">📂 Browse by Category</h2>
+        <a href="browse.html" class="view-all">View all →</a>
+      </div>
+      <div class="categories-grid">
+        <a href="browse.html?cat=furniture" class="category-card" data-category="furniture">
+          <span class="category-icon">🛋️</span>
+          <div class="category-name">Furniture & Home Goods</div>
+          <div class="category-count">234 listings</div>
+        </a>
+        <a href="browse.html?cat=electronics" class="category-card" data-category="electronics">
+          <span class="category-icon">📱</span>
+          <div class="category-name">Electronics & Gadgets</div>
+          <div class="category-count">189 listings</div>
+        </a>
+        <a href="browse.html?cat=clothing" class="category-card" data-category="clothing">
+          <span class="category-icon">👕</span>
+          <div class="category-name">Clothing & Accessories</div>
+          <div class="category-count">312 listings</div>
+        </a>
+        <a href="browse.html?cat=books" class="category-card" data-category="books">
+          <span class="category-icon">📚</span>
+          <div class="category-name">Books, Games & Media</div>
+          <div class="category-count">156 listings</div>
+        </a>
+        <a href="browse.html?cat=tools" class="category-card" data-category="tools">
+          <span class="category-icon">🔧</span>
+          <div class="category-name">Tools & Hardware</div>
+          <div class="category-count">98 listings</div>
+        </a>
+        <a href="browse.html?cat=services" class="category-card" data-category="services">
+          <span class="category-icon">🛠️</span>
+          <div class="category-name">Local Services</div>
+          <div class="category-count">127 listings</div>
+        </a>
+        <a href="browse.html?cat=housing" class="category-card" data-category="housing">
+          <span class="category-icon">🏠</span>
+          <div class="category-name">Housing & Rentals</div>
+          <div class="category-count">45 listings</div>
+        </a>
+        <a href="browse.html?cat=vehicles" class="category-card" data-category="vehicles">
+          <span class="category-icon">🚲</span>
+          <div class="category-name">Vehicles & Bikes</div>
+          <div class="category-count">78 listings</div>
+        </a>
+        <a href="browse.html?cat=free" class="category-card" data-category="free">
+          <span class="category-icon">🎁</span>
+          <div class="category-name">Free Items</div>
+          <div class="category-count">67 listings</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section">
+      <div class="how-it-works">
+        <h2 class="text-center">How It Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-title">Browse</div>
+            <div class="step-desc">Find items and services from people in your neighborhood</div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-title">Connect</div>
+            <div class="step-desc">Message sellers directly to ask questions or arrange pickup</div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-title">Exchange</div>
+            <div class="step-desc">Meet locally and complete your transaction safely</div>
+          </div>
+        </div>
+        <div class="text-center">
+          <a href="safety.html" class="safety-link">📖 Read our safety guidelines</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">🔥 Featured Listings</h2>
+        <a href="browse.html" class="view-all">View all →</a>
+      </div>
+      <div id="featuredListings" class="listings-grid"></div>
+    </section>
+
+    <!-- Post Your First Item CTA -->
+    <section class="section">
+      <div class="how-it-works" style="text-align: center; padding: 3rem;">
+        <h2 style="margin-bottom: 1rem;">Post Your First Item</h2>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+          Have something to sell or a service to offer? Join your neighbors on LocalConnect.
+        </p>
+        <a href="post.html" class="btn btn-primary btn-lg">Create a Listing →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof loadHomeFeaturedListings === 'function') {
+        loadHomeFeaturedListings();
+      }
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">LocalConnect</div>
+          <p class="footer-desc">Your trusted neighborhood marketplace. Buy, sell, and connect with people in your community safely and easily.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-link" aria-label="Instagram">📷</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-heading">Discover</h4>
+          <ul class="footer-links">
+            <li><a href="browse.html">Browse Listings</a></li>
+            <li><a href="browse.html?cat=free">Free Items</a></li>
+            <li><a href="browse.html?cat=services">Local Services</a></li>
+            <li><a href="browse.html?cat=housing">Housing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Community</h4>
+          <ul class="footer-links">
+            <li><a href="safety.html">Safety Guidelines</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Legal</h4>
+          <ul class="footer-links">
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2026 LocalConnect Marketplace. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="about.html">About</a>
+          <a href="help.html">Help Center</a>
+          <a href="safety.html">Safety</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
